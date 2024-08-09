@@ -1,0 +1,31 @@
+[코드분석]
+
+dets / trks : ndarray[list]
+    (n,5) x,y,x,y,score
+
+k_observations : ndarray[list]
+    (n,5) 아마 위와 같이 xyxy score일 듯
+    초기값은 -1로 채워짐
+    각 track들의 최근 tracklet을 가져옴
+
+velocity : ndarray[int]
+    (n,2)
+    각 tracklet들의 속도
+
+speed_direction_batch : Y, X 
+    (trackers, detections), (trackers, detections)
+    각 detections들과 trackers 사이의 방향을 나타내는 벡터
+
+angle_diff_cost : ndarray
+    (trackers, detections)
+    diff cost between detections with trackers using dot product
+
+iou_matrix : ndarray
+    (trackers, detections)
+    diff cost between detections with trackers using iou_matrix
+
+matched_indices = linear_assignment(-(iou_matrix+angle_diff_cost))
+    이 부분이 바로 논문 Eq 8.
+
+inertia_X, inertia_Y : ndarray 
+    tracklet들의 방향 momentum
